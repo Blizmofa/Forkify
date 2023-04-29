@@ -1,8 +1,13 @@
 import * as model from './models/model.js'
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
+import resultsView from './views/resultsView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+
+if (module.hot) {
+  module.hot.accept();
+}
 
 // Gets the recipe from the model
 const getRecipe = async function () {
@@ -24,7 +29,7 @@ const getRecipe = async function () {
     const { recipe } = model.state.recipe
 
     // Render the fetched recipe to the app UI
-    recipeView.renderRecipeData(model.state.recipe);
+    recipeView.renderData(model.state.recipe);
 
   } catch (err) {
     recipeView.renderError();
@@ -36,6 +41,8 @@ const getSearchResult = async function () {
 
   try {
 
+    resultsView.renderLoadingSpinner();
+
     // Get the input from the search field
     const quary = searchView.getSearchFieldValue();
 
@@ -46,7 +53,8 @@ const getSearchResult = async function () {
     // Loads the search results
     await model.loadSearchResults(quary)
 
-    console.log(model.state.search.result);
+    // Render the search results to the app UI
+    resultsView.renderData(model.state.search.result);
 
   } catch (err) {
     console.log(err);

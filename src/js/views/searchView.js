@@ -4,28 +4,29 @@
 
 class SearchView {
 
-    #searchEl = document.querySelector('.search');
+    _htmlEl = document.querySelector('.search');
 
     // Gets the search field value
     getSearchFieldValue() {
-        const query = this.#searchEl.querySelector('.search__field').value;
-        this.#clearSearchInput();
+        const query = this._htmlEl.querySelector('.search__field').value;
+        this._clearSearchInput();
         return query;
     }
 
     // Handler for the search field submit with 'Enter' key
     addSearchHandler(handler) {
-        this.#searchEl.addEventListener('submit', function (event) {
+        this._htmlEl.addEventListener('submit', function (event) {
             event.preventDefault();
             handler();
         });
     }
 
     // Auxiliary method to cleanup the search field 
-    #clearSearchInput() {
-        this.#searchEl.querySelector('.search__field').value = '';
+    _clearSearchInput() {
+        this._htmlEl.querySelector('.search__field').value = '';
     }
 
 }
 
+// Exporting object for the controller
 export default new SearchView();
