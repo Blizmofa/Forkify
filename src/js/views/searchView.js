@@ -1,5 +1,5 @@
 /*
-* Search view class for search field section in the app UI
+* Search view class for the search field section in the app UI
 */
 
 class SearchView {

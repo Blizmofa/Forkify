@@ -2,7 +2,7 @@ import View from "./view";
 import icons from 'url:../../img/icons.svg';
 
 /*
-* Pagination view class for pagination buttons in the app UI
+* Pagination view class for the pagination buttons in the app UI
 */
 
 class PaginationView extends View {

@@ -9,7 +9,7 @@ export default class View {
     _data;
 
     // Renders a given html data
-    renderData(data) {
+    renderData(data, render = true) {
 
         if (!data || (Array.isArray(data) && data.length === 0)) {
             return this.renderError();
@@ -17,6 +17,11 @@ export default class View {
 
         this._data = data;
         const html = this._generateHTML();
+
+        if (!render) {
+            return html;
+        }
+
         this._cleanup();
         this._htmlEl.insertAdjacentHTML('afterbegin', html);
     }
@@ -39,7 +44,7 @@ export default class View {
             const currEl = currDOMElements[i];
 
             // For text changes
-            if (!newDOMEl.isEqualNode(currEl) && newDOMEl.firstChild.nodeValue.trim() !== '') {
+            if (!newDOMEl.isEqualNode(currEl) && newDOMEl.firstChild?.nodeValue.trim() !== '') {
                 currEl.textContent = newDOMEl.textContent;
             }
 

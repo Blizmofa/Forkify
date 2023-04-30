@@ -1,5 +1,5 @@
 /*
-* Helpers contains util helper functions to use throughout the entire app
+* helpers.js contains util helper functions to use throughout the entire app
 */
 
 import { TIMEOUT_SEC } from "./models/configs";

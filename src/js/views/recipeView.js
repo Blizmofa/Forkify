@@ -3,7 +3,7 @@ import icons from 'url:../../img/icons.svg';
 import { Fraction } from 'fractional';
 
 /*
-* Recipe view class for recipe section in the app UI
+* Recipe view class for the recipe section in the app UI
 */
 
 class RecipeView extends View {
@@ -17,7 +17,7 @@ class RecipeView extends View {
         ['hashchange', 'load'].forEach(event => window.addEventListener(event, handler));
     }
 
-    //Handler for recipe view servings buttons
+    // Handler for recipe view servings buttons
     addServingsHandler(handler) {
         this._htmlEl.addEventListener('click', function (event) {
             const btn = event.target.closest('.btn--update-servings');
@@ -37,8 +37,23 @@ class RecipeView extends View {
         });
     }
 
+    // Handler for recipe view bookmark button
+    addBookmarkhandler(handler) {
+        this._htmlEl.addEventListener('click', function (event) {
+            const btn = event.target.closest('.btn--bookmark');
+
+            // For clicks outside button border
+            if (!btn) {
+                return;
+            }
+
+            handler();
+        });
+    }
+
     // Generate html code to be inserted to the DOM
     _generateHTML() {
+
         return `
       <figure class="recipe__fig">
         <img src="${this._data.image}" alt="${this._data.title}" class="recipe__img" />
@@ -77,9 +92,9 @@ class RecipeView extends View {
         </div>
         <div class="recipe__user-generated">
         </div>
-        <button class="btn--round">
+        <button class="btn--round btn--bookmark">
           <svg class="">
-            <use href="${icons}#icon-bookmark-fill"></use>
+            <use href="${icons}#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use>
           </svg>
         </button>
       </div>

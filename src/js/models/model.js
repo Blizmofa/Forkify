@@ -15,6 +15,7 @@ export const state = {
         page: 1,
         resultsPerPage: MAX_SEARCH_RESULTS,
     },
+    bookmarks: [],
 };
 
 // For the recipe object
@@ -24,7 +25,7 @@ export const loadRecipe = async function (id) {
 
         const data = await getJSON(`${API_URL}${id}`);
 
-        // Create new recipe object
+        // Create new recipe object from the server API
         const { recipe } = data.data;
         state.recipe = {
             id: recipe.id,
@@ -36,6 +37,15 @@ export const loadRecipe = async function (id) {
             cookingTime: recipe.cooking_time,
             ingredients: recipe.ingredients,
         };
+
+        // load the recipe from the bookmarks array
+        if (state.bookmarks.some(bookmark => bookmark.id === id)) {
+            state.recipe.bookmarked = true;
+        }
+        else {
+            state.recipe.bookmarked = false;
+        }
+
     } catch (err) {
         throw err;
     }
@@ -59,6 +69,9 @@ export const loadSearchResults = async function (query) {
             }
         });
 
+        // Reset the search result default page to 1
+        state.search.page = 1;
+
     } catch (err) {
         throw err;
     }
@@ -75,7 +88,7 @@ export const getSearchResultsPage = function (page = state.search.page) {
     return state.search.result.slice(start, end);
 }
 
-//
+// For the update of the servings quantities
 export const updateServings = function (servings) {
 
     state.recipe.ingredients.forEach(ingredient => {
@@ -83,4 +96,52 @@ export const updateServings = function (servings) {
     });
 
     state.recipe.servings = servings;
+}
+
+// Adds recipe to the bookmarks array
+export const addBookmark = function (recipe) {
+
+    state.bookmarks.push(recipe);
+
+    if (recipe.id === state.recipe.id) {
+        state.recipe.bookmarked = true;
+    }
+
+    // Use browser local storage
+    saveBookmarksToLocalStorage();
+}
+
+// Removes recipe from the bookmarks array
+export const removeBookmark = function (id) {
+
+    const index = state.bookmarks.findIndex(element => element.id === id);
+    state.bookmarks.splice(index, 1);
+
+    if (id === state.recipe.id) {
+        state.recipe.bookmarked = false;
+    }
+
+    // Use browser local storage
+    saveBookmarksToLocalStorage();
+}
+
+// Saves the bookmarks list to the browser local storage
+const saveBookmarksToLocalStorage = function () {
+    localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+}
+
+// Gets the bookmarks from the browser local storage
+const loadBookmarksFromLocalStorage = function () {
+
+    const storage = localStorage.getItem('bookmarks');
+
+    if (storage) {
+        state.bookmarks = JSON.parse(storage);
+    }
+}
+// loadBookmarksFromLocalStorage();
+
+// Clears local storage
+const clearBookmarksFromLocalStorage = function () {
+    localStorage.clear('bookmarks');
 }
