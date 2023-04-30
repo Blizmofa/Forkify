@@ -12,14 +12,33 @@ class RecipeView extends View {
     _errorMessage = 'Recpie not found.'
     _successMessage = ''
 
-    // Handler for the recipe
+    // Handler for the recipe view
     addRecipeHandler(handler) {
         ['hashchange', 'load'].forEach(event => window.addEventListener(event, handler));
     }
 
+    //Handler for recipe view servings buttons
+    addServingsHandler(handler) {
+        this._htmlEl.addEventListener('click', function (event) {
+            const btn = event.target.closest('.btn--update-servings');
+
+            // For clicks outside button border
+            if (!btn) {
+                return;
+            }
+
+            // Get DOMStringMap key and convert it to a number
+            const updateTo = +btn.dataset.update;
+
+            // For positive amount of servings only
+            if (updateTo > 0) {
+                handler(updateTo);
+            }
+        });
+    }
+
     // Generate html code to be inserted to the DOM
     _generateHTML() {
-
         return `
       <figure class="recipe__fig">
         <img src="${this._data.image}" alt="${this._data.title}" class="recipe__img" />
@@ -44,12 +63,12 @@ class RecipeView extends View {
           <span class="recipe__info-text">servings</span>
 
           <div class="recipe__info-buttons">
-            <button class="btn--tiny btn--increase-servings">
+            <button class="btn--tiny btn--update-servings" data-update="${this._data.servings - 1}">
               <svg>
                 <use href="${icons}#icon-minus-circle"></use>
               </svg>
             </button>
-            <button class="btn--tiny btn--increase-servings">
+            <button class="btn--tiny btn--update-servings" data-update="${this._data.servings + 1}">
               <svg>
                 <use href="${icons}#icon-plus-circle"></use>
               </svg>

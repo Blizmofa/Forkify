@@ -21,6 +21,35 @@ export default class View {
         this._htmlEl.insertAdjacentHTML('afterbegin', html);
     }
 
+    // Update a given html data without re-render it
+    updateData(data) {
+
+        this._data = data;
+        const html = this._generateHTML();
+
+        // Creating a memory copy of the html data
+        const domNoteToUpdate = document.createRange().createContextualFragment(html);
+
+        // Creating a compare variables
+        const newDOMElements = Array.from(domNoteToUpdate.querySelectorAll('*'));
+        const currDOMElements = Array.from(this._htmlEl.querySelectorAll('*'));
+
+        // Update data
+        newDOMElements.forEach((newDOMEl, i) => {
+            const currEl = currDOMElements[i];
+
+            // For text changes
+            if (!newDOMEl.isEqualNode(currEl) && newDOMEl.firstChild.nodeValue.trim() !== '') {
+                currEl.textContent = newDOMEl.textContent;
+            }
+
+            // For attribute changes
+            if (!newDOMEl.isEqualNode(currEl)) {
+                Array.from(newDOMEl.attributes).forEach(attr => currEl.setAttribute(attr.name, attr.value));
+            }
+        });
+    }
+
     // Auxiliary method to cleanup HTML elements
     _cleanup() {
         this._htmlEl.innerHTML = '';

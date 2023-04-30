@@ -1,5 +1,4 @@
 import View from "./view";
-import icons from 'url:../../img/icons.svg';
 
 /*
 * Results view class for search results section in the app UI
@@ -18,9 +17,13 @@ class ResultsView extends View {
 
     // Auxiliary method to generate search result HTML
     _generateSearchResultHTML(result) {
+
+        // Get the selected recipe id
+        const currId = window.location.hash.slice(1);
+
         return `
         <li class="preview">
-            <a class="preview__link" href="#${result.id}">
+            <a class="preview__link ${result.id === currId ? 'preview__link--active' : ''}" href="#${result.id}">
               <figure class="preview__fig">
                 <img src="${result.image}" alt="${result.title}" />
               </figure>
