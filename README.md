@@ -10,4 +10,5 @@ Recipe application developed as a final project of an online Javascript bootcamp
 - Currently supports only computers web browsers.
 
 ## Project Architecture
+This app developed using the MVC Architecture with Publisher-Subscriber design pattern.
 ![forkify-flowchart-part-3](https://user-images.githubusercontent.com/119053363/236464511-3ffca3aa-875a-4f3a-8b44-2b1c5454d360.png)
