@@ -1,21 +1,21 @@
 import * as model from './models/model.js'
+import { ADD_RECIPE_FORM_CLOSE_SEC_TIMOUT } from '../js/models/configs.js'
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
+import addRecipeView from './views/addRecipeView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 /*
-* The controller....
+* For the Controller section in the MVC Architecture.
 */
 
-// if (module.hot) {
-//   module.hot.accept();
-// }
-
-// Controller function for recipe
+/**
+ * Controller for getting recipe object.
+ */
 const getRecipeResult = async function () {
 
   try {
@@ -48,7 +48,9 @@ const getRecipeResult = async function () {
   }
 };
 
-// Controller function for search results
+/**
+ * Controller for getting recipe search results.
+ */
 const getSearchResult = async function () {
 
   try {
@@ -73,11 +75,14 @@ const getSearchResult = async function () {
 
 
   } catch (err) {
-    console.log(err);
+    searchView.renderError();
   }
 };
 
-// Controller function for pagination
+/**
+ * Controller for getting pagination results.
+ * @param {number} goToPage For the page to go to.
+ */
 const getPaginationResult = function (goToPage) {
 
   // Render the new search results to the app UI
@@ -87,7 +92,10 @@ const getPaginationResult = function (goToPage) {
   paginationView.renderData(model.state.search);
 }
 
-// Controller function for servings
+/**
+ * Controller for getting the servings results.
+ * @param {number} servings For the new number of servings.
+ */
 const getServingsResult = function (servings) {
 
   // Update the recipe servings 
@@ -97,7 +105,9 @@ const getServingsResult = function (servings) {
   recipeView.updateData(model.state.recipe);
 }
 
-// Controller function for the bookmarks list
+/**
+ * Controller for getting the bookmarks list results.
+ */
 const getBookmarkListResult = function () {
 
   // Handle bookmarks list
@@ -117,20 +127,61 @@ const getBookmarkListResult = function () {
   bookmarksView.renderData(model.state.bookmarks);
 }
 
-// Controller function for the bookmark section in the app UI
+/**
+ * Controller for getting the bookmarks render results.
+ */
 const getBookmarkRenderResult = function () {
   bookmarksView.renderData(searchView.bookmarks);
 }
 
+/**
+ * Controller for getting the add recipe render results.
+ * @param {object} rec For the recipe object to render.
+ */
+const getAddRecipeResult = async function (rec) {
+
+  try {
+
+    // Renders the loading spinner to the app UI
+    addRecipeView.renderLoadingSpinner();
+
+    // Upload the new recipe to the server API
+    await model.uploadRecipe(rec);
+    console.log(model.state.recipe);
+
+    // Render the new recipe to the app UI
+    recipeView.renderData(model.state.recipe);
+
+    // Display upload success message
+    addRecipeView.renderMessage();
+
+    // Render the new recipe to the bookmark section
+    bookmarksView.renderData(model.state.bookmarks);
+
+    // Change url to the new recipe id
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    // Set timeout to close form
+    setTimeout(function () {
+      addRecipeView.toggleWindow();
+    }, ADD_RECIPE_FORM_CLOSE_SEC_TIMOUT * 1000)
+
+  } catch (err) {
+    addRecipeView.renderError(err.message);
+  }
+
+}
+
 // Initializes the app UI
 const init = function () {
+
   bookmarksView.addBookmarksHandler(getBookmarkRenderResult);
   recipeView.addRecipeHandler(getRecipeResult);
   recipeView.addServingsHandler(getServingsResult)
   recipeView.addBookmarkhandler(getBookmarkListResult);
   searchView.addSearchHandler(getSearchResult);
   paginationView.addPaginationHandler(getPaginationResult);
-
+  addRecipeView.addUploadRecipeHandler(getAddRecipeResult);
 }
 
 init();

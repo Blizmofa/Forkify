@@ -3,58 +3,69 @@ import icons from 'url:../../img/icons.svg';
 import { Fraction } from 'fractional';
 
 /*
-* Recipe view class for the recipe section in the app UI
+* Recipe view class for the recipe section in the app UI.
 */
 
 class RecipeView extends View {
 
-    _htmlEl = document.querySelector('.recipe');
-    _errorMessage = 'Recpie not found.'
-    _successMessage = ''
+  _htmlEl = document.querySelector('.recipe');
+  _errorMessage = 'Recpie not found.'
 
-    // Handler for the recipe view
-    addRecipeHandler(handler) {
-        ['hashchange', 'load'].forEach(event => window.addEventListener(event, handler));
-    }
+  /**
+   * Handler for the recipe view.
+   * @param {function} handler For the handler function to call.
+   */
+  addRecipeHandler(handler) {
 
-    // Handler for recipe view servings buttons
-    addServingsHandler(handler) {
-        this._htmlEl.addEventListener('click', function (event) {
-            const btn = event.target.closest('.btn--update-servings');
+    ['hashchange', 'load'].forEach(event => window.addEventListener(event, handler));
+  }
 
-            // For clicks outside button border
-            if (!btn) {
-                return;
-            }
+  /**
+   * Handler for recipe view servings buttons.
+   * @param {function} handler For the handler function to call.
+   */
+  addServingsHandler(handler) {
+    this._htmlEl.addEventListener('click', function (event) {
+      const btn = event.target.closest('.btn--update-servings');
 
-            // Get DOMStringMap key and convert it to a number
-            const updateTo = +btn.dataset.update;
+      // For clicks outside button border
+      if (!btn) {
+        return;
+      }
 
-            // For positive amount of servings only
-            if (updateTo > 0) {
-                handler(updateTo);
-            }
-        });
-    }
+      // Get DOMStringMap key and convert it to a number
+      const updateTo = +btn.dataset.update;
 
-    // Handler for recipe view bookmark button
-    addBookmarkhandler(handler) {
-        this._htmlEl.addEventListener('click', function (event) {
-            const btn = event.target.closest('.btn--bookmark');
+      // For positive amount of servings only
+      if (updateTo > 0) {
+        handler(updateTo);
+      }
+    });
+  }
 
-            // For clicks outside button border
-            if (!btn) {
-                return;
-            }
+  /**
+   * Handler for recipe view bookmark button
+   * @param {function} handler For the handler function to call.
+   */
+  addBookmarkhandler(handler) {
+    this._htmlEl.addEventListener('click', function (event) {
+      const btn = event.target.closest('.btn--bookmark');
 
-            handler();
-        });
-    }
+      // For clicks outside button border
+      if (!btn) {
+        return;
+      }
 
-    // Generate html code to be inserted to the DOM
-    _generateHTML() {
+      handler();
+    });
+  }
 
-        return `
+  /**
+   * @returns an HTML section to be inserted into the app DOM.
+   */
+  _generateHTML() {
+
+    return `
       <figure class="recipe__fig">
         <img src="${this._data.image}" alt="${this._data.title}" class="recipe__img" />
         <h1 class="recipe__title">
@@ -90,8 +101,11 @@ class RecipeView extends View {
             </button>
           </div>
         </div>
-        <div class="recipe__user-generated">
-        </div>
+        <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
+            <svg>
+              <use href="${icons}#icon-user"></use>
+            </svg>
+          </div>
         <button class="btn--round btn--bookmark">
           <svg class="">
             <use href="${icons}#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use>
@@ -124,11 +138,16 @@ class RecipeView extends View {
         </a>
       </div>
     `;
-    }
+  }
 
-    // Auxiliary method to generate ingredients HTML
-    _generateIngredientsHTML(ingredient) {
-        return `
+  // 
+  /**
+   * @param {object} ingredient For the ingredient object to render.
+   * @returns an HTML code to be inserted into the app DOM.
+   */
+  _generateIngredientsHTML(ingredient) {
+
+    return `
             <li class="recipe__ingredient">
               <svg class="recipe__icon">
                 <use href="${icons}#icon-check"></use>
@@ -140,7 +159,7 @@ class RecipeView extends View {
               </div>
             </li>
             `;
-    }
+  }
 }
 
 // Exporting object for the controller

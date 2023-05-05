@@ -1,21 +1,24 @@
 import View from "./view";
+import icons from 'url:../../img/icons.svg';
 
 /*
-* Preview view class is a parent view class that generate a preview element
-* to be derived from
+* Preview view class is a parent view class that generate a preview element.
 */
 
 class PreviewView extends View {
 
-    _htmlEl = '';
+  _htmlEl = '';
 
-    // Generate a generic preeview HTML
-    _generateHTML() {
+  // 
+  /**
+   * @returns an HTML code to be inserted into the app DOM.
+   */
+  _generateHTML() {
 
-        // Get the selected recipe id
-        const currId = window.location.hash.slice(1);
+    // Get the selected recipe id
+    const currId = window.location.hash.slice(1);
 
-        return `
+    return `
         <li class="preview">
             <a class="preview__link ${this._data.id === currId ? 'preview__link--active' : ''}" href="#${this._data.id}">
               <figure class="preview__fig">
@@ -24,11 +27,16 @@ class PreviewView extends View {
               <div class="preview__data">
                 <h4 class="preview__title">${this._data.title}</h4>
                 <p class="preview__publisher">${this._data.publisher}</p>
+                <div class="preview__user-generated ${this._data.key ? '' : 'hidden'}">
+                 <svg>
+                  <use href="${icons}#icon-user"></use>
+                 </svg>
+               </div>
               </div>
             </a>
         </li>
     `;
-    }
+  }
 }
 
 // Exporting object for the controller

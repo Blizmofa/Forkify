@@ -2,14 +2,17 @@ import View from "./view";
 import icons from 'url:../../img/icons.svg';
 
 /*
-* Pagination view class for the pagination buttons in the app UI
+* Pagination view class for the pagination buttons in the app UI.
 */
 
 class PaginationView extends View {
 
     _htmlEl = document.querySelector('.pagination');
 
-    // Handler for the pagination view buttons clicks
+    /**
+     * Handler for the pagination view buttons clicks.
+     * @param {function} handler For the handler function to call.
+     */
     addPaginationHandler(handler) {
         this._htmlEl.addEventListener('click', function (event) {
             const btn = event.target.closest('.btn--inline');
@@ -26,7 +29,9 @@ class PaginationView extends View {
         });
     }
 
-    // Generate html code to be inserted to the DOM
+    /**
+     * @returns an HTML code to be inserted into the app DOM.
+     */
     _generateHTML() {
 
         // Calculate max number of pages
