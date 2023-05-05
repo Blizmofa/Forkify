@@ -2,7 +2,9 @@
 Recipe application developed as a final project of an online Javascript bootcamp taught by Mr. Jonas Schmedtmann.
 
 ### Usage
-- Written in VS Code on Windows 11 and Built with npm.
+- Written in VS Code on Windows 11.
+- Developed with Google Chrome dev tools.
+- Built with npm.
 
 ### Demo
 - Deployed on Netlify with CI.
