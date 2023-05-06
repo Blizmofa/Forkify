@@ -4,7 +4,7 @@ Recipe application developed as a final project of an online Javascript bootcamp
 ### Usage
 - Written in VS Code on Windows 11.
 - Developed with Google Chrome dev tools.
-- Built with npm.
+- Built with NPM.
 
 ### Demo
 - Deployed on Netlify with CI.
